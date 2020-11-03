@@ -9,7 +9,7 @@ from fastai.vision.all import *
 # Cell
 def load_mnist(path):
     "Load MNIST dataset for generating training data"
-    path = path/'train_images.gz'
+    path = path + 'train_images.gz'
     with gzip.open(path, 'rb') as f:
         mnist = np.frombuffer(f.read(), np.uint8, offset=16)
         mnist = mnist.reshape(-1, 28, 28)
@@ -132,6 +132,9 @@ class ImageTupleTransform(Transform):
 
     def encodes(self, idx):
         x,y = self.ds[idx]
+        for i in range(5):
+            plt.imshow(x[i, 0])
+            plt.show()
         return ImageSeq.create(x, self.cl_type), ImageSeq.create(y, self.cl_type)
 
 # Cell
@@ -142,3 +145,19 @@ def show_batch(x:ImageSeq, y:ImageSeq, samples, ctxs=None, max_n=6, nrows=None, 
         _, ctxs = plt.subplots(min(x[0].shape[0], max_n), ncols, figsize=figsize)
     for i,ctx in enumerate(ctxs):
         samples[i][0].show(ctx=ctx[0]), samples[i][1].show(ctx=ctx[1])
+
+
+def main():
+    DATA_PATH = '/home/wshuo/workspace/moving_mnist/data/'
+    ds = MovingMNIST(DATA_PATH, n_in=5, n_out=5, n_obj=[1, 2, 3])
+    print(len(ds))
+    train_tl = TfmdLists(range(7500), ImageTupleTransform(ds))
+    valid_tl = TfmdLists(range(100), ImageTupleTransform(ds))
+
+    dls = DataLoaders.from_dsets(train_tl, valid_tl, bs=32,
+                                 after_batch=[Normalize.from_stats(imagenet_stats[0][0],
+                                                                   imagenet_stats[1][0])]).cuda()
+
+
+if __name__ == '__main__':
+    main()
