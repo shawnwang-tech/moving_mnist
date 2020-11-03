@@ -132,9 +132,8 @@ class ImageTupleTransform(Transform):
 
     def encodes(self, idx):
         x,y = self.ds[idx]
-        for i in range(5):
-            plt.imshow(x[i, 0])
-            plt.show()
+        # plt.imshow(x[0, 0])
+        # plt.show()
         return ImageSeq.create(x, self.cl_type), ImageSeq.create(y, self.cl_type)
 
 # Cell
@@ -158,6 +157,7 @@ def main():
                                  after_batch=[Normalize.from_stats(imagenet_stats[0][0],
                                                                    imagenet_stats[1][0])]).cuda()
 
+    dls.show_batch()
 
 if __name__ == '__main__':
     main()
