@@ -76,12 +76,12 @@ def show_batch(x:ImageSeq, y:ImageSeq, samples, ctxs=None, max_n=6, nrows=None, 
 
 
 def main():
-    DATA_PATH = "/data/wangshuo/data/heat_diffusion/heat_diffusion_batch_128_size_64x64_objs_1.npy"
+    DATA_PATH = "/Users/wangshuo/Documents/workspace/data/reconstruct/heat_diffusion/heat_diffusion_batch_2_size_64x64_objs_1.npy"
     ds = Heat(DATA_PATH)
-    train_tl = TfmdLists(range(100), ImageTupleTransform(ds))
-    valid_tl = TfmdLists(range(100), ImageTupleTransform(ds))
+    train_tl = TfmdLists(range(2), ImageTupleTransform(ds))
+    valid_tl = TfmdLists(range(2), ImageTupleTransform(ds))
 
-    dls = DataLoaders.from_dsets(train_tl, valid_tl, bs=32,
+    dls = DataLoaders.from_dsets(train_tl, valid_tl, bs=2,
                                  after_batch=[Normalize.from_stats(imagenet_stats[0][0],
                                                                    imagenet_stats[1][0])]).cuda()
 

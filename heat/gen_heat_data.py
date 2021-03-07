@@ -14,7 +14,7 @@ height = 64
 assert width == height
 nodes = width * height
 num_objs = 1
-batch_size = 2
+batch_size = 1000
 t = torch.linspace(0., 1.0, 11).to(float)
 
 data_dir = '/data/wangshuo/data/heat_diffusion'
